@@ -150,13 +150,8 @@ day_summary_ingestor = DaySummaryIngestor(
         default_start_date=datetime.date(2023, 1, 1)
         )
 
-@repeat(every(1).seconds)
+#@repeat(every(1).seconds)
 def job():
     day_summary_ingestor.ingest()
-   
-while True:
-    run_pending()
-    time.sleep(0.5)
 
-
-
+job()
