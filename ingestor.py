@@ -1,7 +1,6 @@
 import datetime
 from abc import ABC, abstractmethod
 from typing import List
-import os
 
 from apis import DaySummaryApi
 
@@ -14,8 +13,7 @@ class DataIngestor(ABC):
     
     @property
     def _checkpoint_filename(self) -> str:
-        print(os.path.dirname(os.path.abspath(__file__)))
-        return os.path.join(os.path.dirname(os.path.abspath(__file__)), f"{self.__class__.__name__}.checkpoint").replace('\\', '/')
+        return f"{self.__class__.__name__}.checkpoint"
     
     def _write_checkpoint(self):
         with open(self._checkpoint_filename, "w") as f:
@@ -26,7 +24,7 @@ class DataIngestor(ABC):
             with open(self._checkpoint_filename, "r") as f:
                 return datetime.datetime.strptime(f.read(), "%Y-%m-%d").date()
         except FileNotFoundError:
-            return None
+            return self.default_start_date
             
     def _get_checkpoint(self):
         if not self._checkpoint:
